@@ -25,7 +25,20 @@
     <div class="dashboard" v-show="!showServiceList">
       <!-- 左边 -->
       <div class="dashboard-left">
-        <div id="dropArea" @drop="drop($event)" @dragover.prevent>
+        <el-button
+          class="button-abs"
+          type="primary"
+          plain
+          icon="DocumentAdd"
+          @click="saveSetting"
+          >保存配置</el-button
+        >
+        <div
+          id="dropArea"
+          @drop="drop($event)"
+          @dragover.prevent
+          :style="{ height: showInfoSelectNode != '' ? '70%' : '100%' }"
+        >
           <div class="container">
             <div class="flow-container">
               <div class="flow-wrapper">
@@ -186,9 +199,6 @@
             </div>
           </van-tab>
         </van-tabs>
-        <el-button type="primary" plain icon="DocumentAdd" @click="saveSetting"
-          >保存配置</el-button
-        >
       </div>
 
       <!-- 右边 -->
@@ -324,51 +334,39 @@ export default {
       nodeInfo: [
         {
           id: "IDSimpleTask",
-          name: "简单任务",
-          password: "123456简单任务",
+          name: "",
+          password: "",
           nodeDesc: "简单任务节点信息",
         },
         {
           id: "IDThrowException",
-          name: "抛异常",
-          password: "123456抛异常",
+          name: "",
+          password: "",
           nodeDesc: "抛异常节点信息",
         },
         {
           id: "IDInsertData",
-          name: "插入数据",
-          password: "123456插入数据",
+          name: "",
+          password: "",
           nodeDesc: "插入数据节点信息",
         },
         {
           id: "IDUpdateData",
-          name: "修改数据",
-          password: "123456修改数据",
+          name: "",
+          password: "",
           nodeDesc: "修改数据节点信息",
         },
         {
           id: "IDWealthService",
-          name: "理财服务",
-          password: "123456理财服务",
+          name: "",
+          password: "",
           nodeDesc: "理财服务节点信息",
         },
         {
           id: "IDFundService",
-          name: "基金服务",
-          password: "123456基金服务",
+          name: "",
+          password: "",
           nodeDesc: "基金服务节点信息",
-        },
-        {
-          id: "1",
-          name: "1服务",
-          password: "1234561服务",
-          nodeDesc: "1服务节点信息",
-        },
-        {
-          id: "2",
-          name: "2服务",
-          password: "1234562服务",
-          nodeDesc: "2服务节点信息",
         },
       ],
       serviceList: [], //查询服务列表
@@ -544,9 +542,17 @@ export default {
           this.nodes.push(JSON.parse(nodeSelfInfo[i]));
         }
         // 节点数据
-        let nodeInfo = res.nodeInfo;
-        for (let index = 0; index < nodeInfo.length; index++) {}
-        console.log("formattedArraay", this.edges, this.nodes);
+        let nodeInfoRes = res.nodeInfo;
+        for (let j = 0; j < nodeInfoRes.length; j++) {
+          let nodeInfoResJSON = JSON.parse(nodeInfoRes[j]);
+          let nodeIndex = this.nodeInfo.findIndex(
+            (item) => item.id === nodeInfoResJSON.id
+          );
+          if (nodeIndex > -1) {
+            this.nodeInfo[nodeIndex] = nodeInfoResJSON;
+          }
+        }
+        console.log("formattedArraay", this.edges, this.nodes, this.nodeInfo);
       });
     },
   },
@@ -565,13 +571,21 @@ export default {
     position: relative;
 
     .dashboard-left {
+      position: relative;
+
+      .button-abs {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 10;
+      }
       width: 100%;
       ::v-deep .van-tab {
         font-size: 18px !important;
       }
       #dropArea {
         width: 100%;
-        height: 70%;
+        // height: 70%;
         position: relative;
         .container {
           // max-width: 1200px;

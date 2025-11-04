@@ -25,7 +25,20 @@
     <div class="dashboard" v-show="!showServiceList">
       <!-- 左边 -->
       <div class="dashboard-left">
-        <div id="dropArea" @drop="drop($event)" @dragover.prevent>
+        <el-button
+          class="button-abs"
+          type="primary"
+          plain
+          icon="DocumentAdd"
+          @click="saveSetting"
+          >保存配置</el-button
+        >
+        <div
+          id="dropArea"
+          @drop="drop($event)"
+          @dragover.prevent
+          :style="{ height: showInfoSelectNode != '' ? '70%' : '100%' }"
+        >
           <div class="container">
             <div class="flow-container">
               <div class="flow-wrapper">
@@ -186,11 +199,7 @@
             </div>
           </van-tab>
         </van-tabs>
-        <el-button type="primary" plain icon="DocumentAdd" @click="saveSetting"
-          >保存配置</el-button
-        >
       </div>
-
       <!-- 右边 -->
       <div class="dashboard-right" v-if="showManagerRightDialog">
         <div class="palette">
@@ -566,6 +575,13 @@ export default {
     position: relative;
 
     .dashboard-left {
+      position: relative;
+      .button-abs {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 10;
+      }
       width: 100%;
       ::v-deep .van-tab {
         font-size: 18px !important;
